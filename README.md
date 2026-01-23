@@ -5,13 +5,13 @@ Shared OpenCode config directory containing my personal **skills**, **agents**, 
 ## Usage
 
 1. Clone this repo somewhere on your machine.
-2. Set `OPENCODE_CONFIG_DIR` to the path where you cloned it.
+2. Set `OPENCODE_CONFIG_DIR` to the `.opencode` directory *inside* your cloned copy (i.e., `<path-you-cloned-to>/.opencode`).
 
 Add this to your shell profile:
 
 ```sh
 # ~/.zshrc or ~/.bashrc
-export OPENCODE_CONFIG_DIR="/path/to/shared/opencode-config/.opencode"
+export OPENCODE_CONFIG_DIR="/path/to/cloned/opencode-config/.opencode"
 ```
 
 Restart your shell (or `source` your profile), and you’re done.
