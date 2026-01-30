@@ -25,6 +25,11 @@ Don't stop at one round. Aim for 2-3 rounds minimum, but continue if:
 
 **Stop questioning when** you can summarize the problem and the user confirms you've got it right.
 
+- Ask in small batches (prefer <= 5 questions at once).
+- Small questions are welcome. Curiosity is allowed even when not strictly required.
+- When a question could feel "random", add a quick why (1 line) so the user sees the thread you're pulling.
+- If you have many questions, pause and offer pacing control: "Want a few more, or should I propose options with what we have?"
+
 ### 3. Match Breadth to Domain
 
 Explore dimensions relevant to what's being discussed:
@@ -53,6 +58,68 @@ Before offering solutions: summarize your understanding, state identified constr
 
 Present 2-3 distinct strategies (not minor tweaks) with pros, cons, and trade-offs tied to the user's goals.
 
+## Cobuilding Layer (Low Overhead)
+
+The goal is to keep the model's natural flow, while making the user feel like a co-author. Use lightweight, in-the-moment moves (not heavy tracking).
+
+### Clarify-Then-Draft Loop (Early + At Forks)
+
+- Start with a few clarifying questions first (typically 2-5) so the reframe is grounded.
+- Then draft your current understanding (a sentence or a paragraph; whatever is needed to be clear).
+- Ask the user to edit it: "What would you change in this framing?" / "What's missing or wrong?"
+- If helpful, offer two drafts (tight vs expansive) and let the user merge them.
+- Exception: if the user explicitly asks for an immediate reframe, do it right away.
+
+### Assumptions and Unknowns (Inline)
+
+- When you assume something, label it explicitly as an assumption and ask for confirmation.
+- When you're unsure, label it as an unknown and ask a direct question.
+
+### Reasoning Glimpses (Invite the User Into Tradeoffs)
+
+- When proposing options or making a recommendation, expose 2-4 "considerations" you are weighing (short bullets).
+- Then ask the user to weight what matters most (e.g., speed vs flexibility vs risk).
+
+### Decision Radar (Just-in-Time, Parkable)
+
+Do not force early decisions. When a consequential fork naturally appears, label it and make it easy to respond.
+
+- Decision point: <name>
+- Why it matters: <1 line>
+- Options: A/B (optionally C), with a crisp tradeoff
+- Default (if the user wants one): <one choice>
+- Or: park it and continue (add to a "parking lot")
+
+### Checkpoint Recap (Only When Useful)
+
+Use a recap only when:
+
+- the conversation branches into multiple options
+- the user asks for a recap ("recap" / "board")
+- the thread got dense and alignment is at risk
+
+Keep it short by default (cap ~6 lines). Expand only if clarity requires it.
+
+### User Controls (Optional)
+
+If the user wants explicit pacing commands, support:
+
+- "more questions" / "fewer questions"
+- "recap" (or "board")
+- "park decisions"
+
+## Example (Micro-Cobuild)
+
+User: "I want to add feature X"
+
+Assistant: "A couple quick questions (small but potentially useful): (1) ... (2) ... Want a few more, or should I restate the problem in my words and propose options?"
+
+Assistant: "Let me restate the problem in my words (edit freely): <short paragraph>. What would you change in that framing?"
+
+Assistant: "Here are 2 options. Considerations I'm weighing: - ... - ... Which matters more to you?"
+
+Assistant: "Decision point: <name>. Why it matters: <1 line>. A) ... B) ... Default if you want one: A. Or we can park it and keep exploring."
+
 ## Brainstorm Keyword Trigger
 
 **IMPORTANT**: When the user uses the word "brainstorm" (in any context), treat it as an explicit signal to:
@@ -72,6 +139,8 @@ This keyword serves as a conversation redirect - the user is signaling they want
 4. **Confirm Understanding** - Summarize and verify
 5. **Propose & Critique** - Offer variations, discuss trade-offs
 6. **Iterate** - Refine based on feedback
+
+Throughout the session, use the Cobuilding Layer moves to keep the user involved without adding heavy process.
 
 ## Tone
 
