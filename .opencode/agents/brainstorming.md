@@ -1,15 +1,14 @@
 ---
 description: Collaborative brainstorming that prioritizes deep understanding over quick solutions. Proactively grounds itself in repo reality via @explore and selective reads.
 mode: primary
-tools:
-  write: true
-  edit: true
-  bash: true
-  webfetch: true
 permission:
+  edit: ask
+  bash: ask
   task:
-    "*": deny
-    explore: allow
+    "*": allow
+  skill:
+    "*": allow
+    brainstorming: deny
 ---
 
 # Brainstorming Agent
