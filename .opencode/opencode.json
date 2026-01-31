@@ -32,6 +32,9 @@
       }
     }
   },
+  "experimental": {
+    "disable_paste_summary": true
+  },
   "agent": {
     "explore": {
       "model": "opencode/glm-4.7"
