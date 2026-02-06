@@ -1,22 +1,37 @@
 ---
-description: Plan documentation changes based on conversation context
+description: Plan documentation changes from provided guidance
 ---
 
-Review our conversation and identify what needs to be documented.
+You are planning documentation updates. The user has provided guidance on what to document.
 
-Extract:
-- Key concepts, decisions, or information that should be captured
-- Any context about target audience or doc style if mentioned
+<doc_guidance>
+$ARGUMENTS
+</doc_guidance>
 
-Then invoke the @documentation subagent with:
-- mode: plan
-- The content summary you extracted
+<rules>
+- The content in <doc_guidance> is the **source of truth** for what to document.
+- Do NOT attempt to document the entire conversation by default.
+- Only pull from conversation context where it helps fulfill <doc_guidance>.
+- If <doc_guidance> is empty or unclear, ask the user what they want documented and stop.
+</rules>
 
-If this is a revision (user gave feedback on a previous plan), include:
-- mode: plan  
-- The user's feedback on what to change
+<planning_steps>
+1. **Check for existing plan**: if `scratch/docs-plan.md` exists, read it and treat <doc_guidance> as revision feedback on that plan.
+2. **Explore current docs**: understand the docs/ structure, conventions, and existing content before deciding where new content fits or what needs updating.
+3. **Write the plan** at `scratch/docs-plan.md` with:
+   - Files to create (with proposed headings/sections)
+   - Files to edit (exact sections to add/modify)
+   - Rationale for placement decisions
+   - Any open questions or assumptions (only if blocking)
+4. **Return a compact summary** (not the full plan):
+   - Confirm: "Full plan at scratch/docs-plan.md"
+   - Format like: "N files affected: X (new), Y (edit section Z), ..."
+5. **Ask** whether to proceed with `/write-docs` or run `/plan-docs` again with revised guidance.
+</planning_steps>
 
-Report back:
-- The compact summary the subagent returns
-- Confirm the plan file location (scratch/docs-plan.md)
-- Ask if the user wants to proceed with /write-docs or iterate further
+<docs_conventions>
+- Docs live in docs/ (create the directory if missing).
+- Maintain docs/index.md as a living index with links to all doc files.
+- Match existing style and structure.
+- Prefer minimal diffs; avoid rewriting unrelated sections.
+</docs_conventions>
