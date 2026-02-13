@@ -1,51 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "provider": {
-    "opencode": {
-      "models": {
-        "gpt-5.2": {
-          "options": {
-            "reasoningEffort": "high"
-          }
-        },
-        "gpt-5.2-codex": {
-          "options": {
-            "reasoningEffort": "high"
-          }
-        },
-        "gpt-5.3-codex": {
-          "options": {
-            "reasoningEffort": "high"
-          }
-        },
-        "claude-opus-4-6": {
-          "options": {
-            "thinking": {
-              "type": "enabled",
-              "budgetTokens": 31999
-            }
-          }
-        },
-        "claude-sonnet-4-5": {
-          "options": {
-            "thinking": {
-              "type": "enabled",
-              "budgetTokens": 31999
-            }
-          }
-        }
-      }
-    },
-    "openai": {
-      "models": {
-        "gpt-5.3-codex": {
-          "options": {
-            "reasoningEffort": "high"
-          }
-        }
-      }
-    }
-  },
   "experimental": {
     "disable_paste_summary": true
   },
