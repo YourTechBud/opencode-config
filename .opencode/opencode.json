@@ -5,7 +5,7 @@
   },
   "agent": {
     "explore": {
-      "model": "opencode/minimax-m2.1"
+      "model": "opencode/minimax-m2.5"
     }
   }
 }
