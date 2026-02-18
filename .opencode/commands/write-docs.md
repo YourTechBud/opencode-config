@@ -9,7 +9,7 @@ Read the plan from `scratch/docs-plan.md` and execute it.
 - Create or edit files exactly as the plan specifies.
 - Match existing docs style and structure.
 - Keep changes focused; do not rewrite unrelated sections.
-- Maintain docs/index.md as a living index with links to all doc files.
+- Maintain docs/README.md as a living index with links to all doc files.
 </rules>
 
 <steps>
