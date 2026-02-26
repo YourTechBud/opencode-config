@@ -5,7 +5,7 @@
   },
   "agent": {
     "explore": {
-      "model": "opencode/minimax-m2.5"
+      "model": "opencode/claude-haiku-4-5"
     }
   }
 }
