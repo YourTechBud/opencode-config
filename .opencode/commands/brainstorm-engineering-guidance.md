@@ -33,7 +33,7 @@ Work with the user toward:
 - optimize for future change
 - preserve boundaries
 - prefer deep modules over shallow fragmentation
-- keep surfaces legible
+- keep surfaces legible and signal-rich
 - prefer local reasoning
 - make contracts explicit
 - keep behavior honest and visible
