@@ -25,19 +25,19 @@ $ARGUMENTS
    - Identify top-level directories under `docs/` besides `architecture/`, `journeys/`, `product/` (custom dirs; discouraged but allowed).
    - Understand existing style, conventions, and any duplication/verbosity issues before deciding what to change.
 3. **Write the plan** at `scratch/docs-plan.md` with:
-    - Files to create (with proposed headings/sections)
-    - Files to edit (exact sections to add/modify)
-    - Consolidation/refactor changes (moves/merges/trims) that improve findability and reduce duplication
-    - Structure enforcement actions:
-      - Ensure `docs/`, `docs/architecture/`, `docs/journeys/`, `docs/product/` exist
-      - Plan moves for any non-`.md` files found under `docs/` (move out of `docs/`)
-      - Plan moves for any root-level docs (optional; discouraged-but-allowed; call out as major diffs if you move them)
-      - For any custom `docs/<dir>/`, add/update scope and links in `docs/README.md`
-      - Ensure `docs/README.md` includes scopes + a complete index of all docs files (excluding itself), grouped by top-level directory
-    - Major diffs to confirm (file moves/renames/deletes, cross-file merges, large restructures)
-    - Detail preservation notes (what information is moved/merged and where it ends up)
-    - Rationale for placement decisions
-    - Any open questions or assumptions (only if blocking)
+   - Files to create (with proposed headings/sections)
+   - Files to edit (exact sections to add/modify)
+   - Consolidation/refactor changes (moves/merges/trims) that improve findability and reduce duplication
+   - Structure enforcement actions:
+     - Ensure `docs/`, `docs/architecture/`, `docs/journeys/`, `docs/product/` exist
+     - Plan moves for any non-`.md` files found under `docs/` (move out of `docs/`)
+     - Plan moves for any root-level docs (optional; discouraged-but-allowed; call out as major diffs if you move them)
+     - For any custom `docs/<dir>/`, add/update scope and links in `docs/README.md`
+     - Ensure `docs/README.md` includes scopes + a complete index of all docs files (excluding itself), grouped by top-level directory
+   - Major diffs to confirm (file moves/renames/deletes, cross-file merges, large restructures)
+   - Detail preservation notes (what information is moved/merged and where it ends up)
+   - Rationale for placement decisions
+   - Any open questions or assumptions (only if blocking)
 4. **Return a compact summary** (not the full plan):
    - Confirm: "Full plan at scratch/docs-plan.md"
    - Format like: "N files affected: X (new), Y (edit section Z), ..."
@@ -96,10 +96,11 @@ When creating or updating `docs/README.md`, use this shape (adapt headings to ex
    - `docs/` root (discouraged) (links for any `docs/*.md` excluding `docs/README.md`)
 
 Index rules:
+
 - Include every file under `docs/` excluding `docs/README.md` itself.
 - Because `docs/` is Markdown-only, everything listed should be a `.md` file.
 - Use repo-relative paths in links (e.g. `docs/product/vision.md`).
 - Stable ordering: sort paths lexicographically within each group.
 
 </readme_template_guidance>
-  </docs_conventions>
+</docs_conventions>
