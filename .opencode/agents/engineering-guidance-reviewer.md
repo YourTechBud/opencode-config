@@ -87,6 +87,8 @@ Existing code is not evidence of correctness — do not accept "the rest of the 
 
 Ground the review in the scoped changes first. Start from the diff or change set the caller asked you to inspect, and read sufficient surrounding file context to judge boundaries, contracts, state flow, runtime behavior, failure handling, diagnosability, and verification quality. Do not limit yourself to the minimal diff — understand the context the changes live in.
 
+When loaded guidance calls for broader context — for example, to assess consistency, reuse, modularity, or drift risk — actively look for nearby features, sibling components, existing helpers, and established patterns outside the immediate diff as needed. Keep formal findings anchored to the scoped changes, and use surrounding code as context rather than as permission to broadly review untouched code.
+
 ## Review Priorities
 
 Focus on the highest-value issues first. Use the loaded engineering guidance docs to determine what matters in this repo, and tie each finding back to the relevant principle or lens rather than to generic best practices.
