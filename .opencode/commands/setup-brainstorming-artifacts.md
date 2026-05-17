@@ -6,111 +6,65 @@ agent: brainstorming
 Set up or revise a brainstorming artifact workspace for this repo.
 
 <goal>
-Create `.isagi/brainstorming-workspace` as a repo-local visual thinking surface for artifact-based brainstorming.
+The eventual goal is to create or revise `.isagi/brainstorming-workspace` as a repo-local artifact surface for brainstorming.
 
-The setup should produce workspace guidance docs under `.isagi/brainstorming-workspace/guidance/` and adapt the scaffold to the repo's existing tooling where useful.
-
-If a workspace already exists, improve it instead of starting over.
+Do not treat this as a setup wizard. Treat it as a guided discovery process that helps the user figure out what kind of artifact workspace would meaningfully reduce cognitive load for their brainstorming process.
 </goal>
 
-<core_model>
-- Normal brainstorming stays generic and works without artifacts.
-- `/brainstorm-with-artifacts` activates artifact mode and owns the runtime protocol.
-- Workspace guidance docs own repo/workspace-specific mechanics and page anatomy.
-- This setup command owns discovery, scaffold creation, guidance generation, and reentrant revision.
-</core_model>
+<operating_model>
+- Start with lightweight, read-only repo discovery: check whether `.isagi/brainstorming-workspace` exists, inspect any existing guidance, and understand repo tooling only enough to avoid bad setup assumptions.
+- Use repo context as background, not as the main frame of the first conversation.
+- Move through the work in gated stages. Internally, use stages to avoid collapsing discovery, onboarding, option discussion, and implementation into one turn. Externally, use natural language unless labels help clarity.
+- After read-only discovery, do not move to a new stage without explicit user consent.
+- Do not create or modify files until the user has explicitly confirmed the desired artifact experience, the principles to encode, the setup direction, and permission to implement.
+- If the user asks to skip questions and "just set it up," keep the discovery lightweight, but still establish the minimum shared understanding needed before implementation.
+</operating_model>
 
-<principles_to_preserve>
-The guidance you produce must encode these principles. They are not optional — the runtime protocol and the workspace's value depend on them.
+<stages>
+1. Repo/context discovery — read-only prerequisite work.
+2. Problem discovery and onboarding — orient the user to artifact brainstorming as a way to reduce cognitive load, then understand what brainstorming problems they want artifacts to help with. Do not discuss setup tooling yet.
+3. Desired artifact experience — help the user articulate what the workspace should make easier to see, preserve, compare, revisit, decide, or ignore.
+4. Confirmed principles — propose user-owned principles based on the conversation. Seed principles below are lenses, not doctrine. Include a principle in final guidance only when it fits the user's needs or the user confirms it.
+5. Setup options and tradeoffs — present workspace/technical options only after principles are confirmed. Explain why each option matters in relation to the confirmed principles. Avoid defaults, hidden recommendations, or bias declarations. Consider structural robustness: if navigation, shared layout, repeated page types, or consistency are likely to matter, discuss framework or static-site structures such as Astro, React with routing, Vue, or another repo-appropriate tool. Do not choose a framework because it is more powerful; choose it when it reduces future artifact breakage, duplicated navigation, inconsistent page anatomy, or maintenance friction.
+6. Implementation permission — summarize agreed direction and intended file changes, then ask for explicit permission before editing.
+7. Post-setup orientation — explain how to use the workspace, where guidance lives, and how `/brainstorm-with-artifacts` uses it.
+</stages>
 
-## 1. Reduce Cognitive Burden
+<seed_principles>
+Use these as internal lenses during discovery and guidance creation. Do not present them as a mandatory checklist, and do not preserve rejected principles in the final workspace guidance.
 
-The workspace exists to make long brainstorming easier to stay inside. It must not become a second inbox, a decorative dashboard, or another surface the user has to monitor.
+- Reduce cognitive burden; the workspace should make long brainstorming easier to stay inside.
+- Chat conducts; artifacts carry substantial reasoning.
+- Questions should live with relevant branch context, not as detached chat lists.
+- Active decision branches should usually be the main unit.
+- Branches need predictable high-level anatomy, but their bodies should stay freeform; do not hardcode a universal branch body template.
+- Real pushback should be visible when present.
+- Artifacts should develop suggestions, tradeoffs, and options, not only questions.
+- Visual form should compress thought, not decorate it.
+- Minimal, quiet UI usually beats design-heavy presentation.
+- Prefer linear, predictable reading flows over bento grids or dashboard-like layouts.
+- Navigation should make the workspace easy to re-enter.
+- Anti-staleness should not become amnesia; preserve important cumulative context.
+- Implementation plans should be created only when explicitly requested.
+</seed_principles>
 
-## 2. Chat Conducts; Artifacts Reason
+<guidance_output>
+When implementation is approved, create or revise guidance under `.isagi/brainstorming-workspace/guidance/`.
 
-In artifact mode, chat acknowledges the user, briefly orients them, says what changed, and points to the relevant artifact surface. The artifact carries substantial reasoning: decision branches, tradeoffs, pushback, suggestions, diagrams, questions, and plans when explicitly requested.
+Guidance may define page roles, navigation expectations, and branch-level anatomy, but the branch body should remain an adaptive reasoning surface.
 
-## 3. Questions Live With Branch Context
-
-Do not create separate question lists in chat. Put questions in the relevant branch so the user can answer while looking at the context. This prevents the user from bouncing between chat and page just to understand what to answer.
-
-## 4. Active Branches Are The Main Unit
-
-The user usually cares about the current decision branches, not a global archive. The root page should emphasize active branches and de-emphasize or collapse closed branches. Global understanding may exist, but it should not compete with active reasoning.
-
-## 5. Branches Need Predictable Anatomy And Freeform Bodies
-
-A branch should usually include:
-
-- branch understanding: the current state of thinking for that branch;
-- branch body: freeform reasoning and visuals;
-- branch questions: questions for the user, placed in the artifact.
-
-The branch body can use whatever best compresses the thinking: Mermaid, SVG, tables, diagrams, workflows, mocks, code sketches, canvas, prose, or links to detail pages.
-
-## 6. Pushback Must Be Visible When Present
-
-Pushback helps the user appreciate why a decision is being made. It should not be an empty ritual, but real critique should be clearly labeled and easy to find.
-
-## 7. Artifacts Need Suggestions, Not Just Questions
-
-Develop options, tradeoffs, critique, and recommendations before asking for input. Do not make the artifact a passive questionnaire.
-
-## 8. Visual Form Should Compress Thought
-
-Use visual and spatial forms when they reduce reading burden — Mermaid, SVG, diagrams, tables, workflows, code-like structures, mockups, canvas, or lightweight interaction. Do not decorate prose for its own sake.
-
-## 9. Minimal, Quiet UI Beats Design-Heavy Presentation
-
-The workspace is a thinking aid, not a landing page. Favor clear hierarchy, calm surfaces, enough spacing, readable type, and low visual noise.
-
-## 10. Navigation Is A First-Class Artifact Principle
-
-Every page should show where it sits and how to return to the active branch map or plan. If the workspace grows beyond a few pages, use shared navigation/layout components.
-
-## 11. Anti-Staleness Should Not Become Amnesia
-
-Preserve important cumulative context. Patch relevant branches when possible. Rewrite only when structure has become muddy. Closed branches should be collapsed or de-emphasized rather than erased.
-
-## 12. Implementation Plans Are User-Triggered Only
-
-Do not auto-create implementation plans. You may recommend that the discussion is ready for planning, but a plan should be created only when the user explicitly asks. When a plan exists, the root page should surface it prominently above the branch index.
-</principles_to_preserve>
-
-<guidance_shape>
-Produce guidance under `.isagi/brainstorming-workspace/guidance/`. Default to a single concise file when the workspace is small. Split into focused files only when each owns a distinct concern. Candidate split:
+Default to a concise guidance structure. Split into focused files only when useful, for example:
 
 - `guidance/index.md` — entry point and links
-- `guidance/principles.md` — the principles above, as encoded for this repo
-- `guidance/branch-anatomy.md` — branch structure, lifecycle, question placement, pushback conventions
+- `guidance/principles.md` — confirmed user-owned principles
+- `guidance/branch-anatomy.md` — branch structure, lifecycle, questions, pushback
 - `guidance/visual-tools.md` — Mermaid, SVG, canvas, tables, diagrams, mocks, rendering support
-- `guidance/navigation.md` — top bars, breadcrumbs, side navigation, links between root, branches, details, and plans
+- `guidance/navigation.md` — links between root, branches, details, and plans
 - `guidance/operations.md` — run, reset, build, and maintenance commands
-</guidance_shape>
-
-<process>
-1. Check whether `.isagi/brainstorming-workspace` already exists. If it does, read its guidance and ask what is not working — do not wipe or replace unless the user wants that.
-2. Inspect the repo for existing tooling and UI conventions: package manager, Vite/Astro/React/Tailwind/HTMX, design tokens, existing docs patterns, or no JS tooling at all.
-3. Briefly explain viable setup options. Avoid a rigid questionnaire.
-4. Discuss render support when useful — Mermaid for diagrams, SVG for bespoke visuals, canvas/JS only when interaction materially helps, shared layout components when page count makes duplication painful, plain HTML when simplicity wins.
-5. Ask how to proceed when the choice is not obvious.
-6. Create or revise a minimal working workspace under `.isagi/brainstorming-workspace`.
-7. Write workspace guidance docs that encode the principles above and document local mechanics.
-8. Include starter pages that demonstrate branch-based artifact structure, navigation, and a plan placeholder.
-</process>
-
-<default_bias>
-- Prefer the simplest working setup.
-- Use plain HTML when no JavaScript tooling is appropriate.
-- Reach for Vite/Tailwind, Astro, HTMX, or another local fit only when it materially reduces future artifact friction.
-- Astro is a strong suggestion when navigation/layout duplication is already painful or likely.
-- Add Mermaid/render support when it meaningfully improves visual thinking.
-- Do not modify the repo's main `AGENTS.md`.
-</default_bias>
+</guidance_output>
 
 <after_setup>
-- Tell the user how to run the workspace.
+- Tell the user how to open or run the workspace.
 - Tell the user to invoke `/brainstorm-with-artifacts` to use it.
 - Mention where the guidance index lives.
 </after_setup>
