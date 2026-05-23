@@ -8,8 +8,6 @@ description: |
   Why use it: UI/UX brainstorming goes wrong when the agent treats the user's requested UI as the answer, invents taste that does not match the product, describes designs in words when a mockup would land faster, or proposes a single direction when alternatives would surface better solutions. This skill keeps the focus on the underlying problem, anchors the visual language in the actual app, and uses variants to reveal tradeoffs.
 
   When to invoke it: when the user is brainstorming interface, interaction, layout, navigation, forms, dashboards, onboarding, modals, journeys, redesigns, polish passes, or any frontend product decision; or whenever the question is fundamentally "what should this look like, feel like, or behave like?"
-
-  This skill is medium-agnostic. Mockups can be HTML, full prototype projects, sketches, or anything else that helps the user see the design. The agent chooses the medium that best surfaces the design decision.
 ---
 
 # Brainstorming UI/UX Blueprint
