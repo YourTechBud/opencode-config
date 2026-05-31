@@ -27,8 +27,10 @@ interface Checkpoint {
 interface ActiveTurn {
 	cwd: string;
 	gitRoot: string;
-	userEntryId: string;
 	beforeCommit: string;
+	leafEntryIdAtSnapshot?: string;
+	previousLastUserEntryId?: string;
+	userEntryId?: string;
 	sessionFile?: string;
 }
 
@@ -289,8 +291,28 @@ function restoreCheckpointsFromEntries(entries: readonly SessionEntry[]): void {
 	}
 }
 
+function resolveActiveTurnUserEntry(turn: ActiveTurn, ctx: ExtensionContext): SessionEntry | undefined {
+	if (turn.userEntryId) {
+		return ctx.sessionManager.getBranch().find((entry) => entry.id === turn.userEntryId);
+	}
+
+	const userEntry = findLastUserEntry(ctx.sessionManager.getBranch());
+	if (!userEntry) return undefined;
+	if (userEntry.id === turn.previousLastUserEntryId && userEntry.id !== turn.leafEntryIdAtSnapshot) return undefined;
+	turn.userEntryId = userEntry.id;
+	return userEntry;
+}
+
+function activeTurnMatchesUserEntry(turn: ActiveTurn, userEntry: SessionEntry): boolean {
+	if (turn.userEntryId === userEntry.id) return true;
+	if (turn.userEntryId) return false;
+	if (userEntry.id === turn.previousLastUserEntryId && userEntry.id !== turn.leafEntryIdAtSnapshot) return false;
+	turn.userEntryId = userEntry.id;
+	return true;
+}
+
 async function currentOrStoredCheckpoint(userEntry: SessionEntry): Promise<Checkpoint> {
-	if (activeTurn?.userEntryId === userEntry.id) {
+	if (activeTurn && activeTurnMatchesUserEntry(activeTurn, userEntry)) {
 		const turn = activeTurn;
 		const afterCommit = await trackSnapshot(turn.gitRoot);
 		const changedFiles = await diffFiles(turn.gitRoot, turn.beforeCommit, afterCommit);
@@ -298,7 +320,7 @@ async function currentOrStoredCheckpoint(userEntry: SessionEntry): Promise<Check
 			version: 1,
 			cwd: turn.cwd,
 			gitRoot: turn.gitRoot,
-			userEntryId: turn.userEntryId,
+			userEntryId: userEntry.id,
 			beforeCommit: turn.beforeCommit,
 			afterCommit,
 			changedFiles,
@@ -352,6 +374,34 @@ function notify(ctx: ExtensionContext, message: string, level: "info" | "warning
 	if (ctx.hasUI) ctx.ui.notify(message, level);
 }
 
+async function saveActiveTurnCheckpoint(pi: ExtensionAPI, ctx: ExtensionContext): Promise<void> {
+	const turn = activeTurn;
+	if (!turn) return;
+	activeTurn = undefined;
+	try {
+		const userEntry = resolveActiveTurnUserEntry(turn, ctx);
+		if (!userEntry) throw new Error("Could not associate snapshot with the current user message.");
+		const signal = ctx.signal?.aborted ? undefined : ctx.signal;
+		const afterCommit = await trackSnapshot(turn.gitRoot, signal);
+		const changedFiles = await diffFiles(turn.gitRoot, turn.beforeCommit, afterCommit, signal);
+		const checkpoint: Checkpoint = {
+			version: 1,
+			cwd: turn.cwd,
+			gitRoot: turn.gitRoot,
+			userEntryId: userEntry.id,
+			beforeCommit: turn.beforeCommit,
+			afterCommit,
+			changedFiles,
+			sessionFile: turn.sessionFile,
+			createdAt: Date.now(),
+		};
+		checkpoints.set(userEntry.id, checkpoint);
+		pi.appendEntry(CHECKPOINT_ENTRY_TYPE, checkpoint);
+	} catch (error) {
+		notify(ctx, `Failed to save /undo checkpoint: ${error instanceof Error ? error.message : String(error)}`, "warning");
+	}
+}
+
 export default function undoExtension(pi: ExtensionAPI): void {
 	pi.on("session_start", (_event, ctx) => {
 		activeTurn = undefined;
@@ -365,15 +415,15 @@ export default function undoExtension(pi: ExtensionAPI): void {
 
 	pi.on("before_agent_start", async (_event, ctx) => {
 		try {
-			const userEntry = findLastUserEntry(ctx.sessionManager.getBranch());
-			if (!userEntry) return;
+			const previousLastUserEntry = findLastUserEntry(ctx.sessionManager.getBranch());
 			const gitRoot = await findGitRoot(ctx.cwd);
 			const beforeCommit = await trackSnapshot(gitRoot, ctx.signal);
 			activeTurn = {
 				cwd: ctx.cwd,
 				gitRoot,
-				userEntryId: userEntry.id,
 				beforeCommit,
+				leafEntryIdAtSnapshot: ctx.sessionManager.getLeafId(),
+				previousLastUserEntryId: previousLastUserEntry?.id,
 				sessionFile: ctx.sessionManager.getSessionFile(),
 			};
 		} catch (error) {
@@ -385,29 +435,18 @@ export default function undoExtension(pi: ExtensionAPI): void {
 		}
 	});
 
-	pi.on("agent_end", async (_event, ctx) => {
-		const turn = activeTurn;
-		if (!turn) return;
-		activeTurn = undefined;
-		try {
-			const afterCommit = await trackSnapshot(turn.gitRoot, ctx.signal);
-			const changedFiles = await diffFiles(turn.gitRoot, turn.beforeCommit, afterCommit, ctx.signal);
-			const checkpoint: Checkpoint = {
-				version: 1,
-				cwd: turn.cwd,
-				gitRoot: turn.gitRoot,
-				userEntryId: turn.userEntryId,
-				beforeCommit: turn.beforeCommit,
-				afterCommit,
-				changedFiles,
-				sessionFile: turn.sessionFile,
-				createdAt: Date.now(),
-			};
-			checkpoints.set(turn.userEntryId, checkpoint);
-			pi.appendEntry(CHECKPOINT_ENTRY_TYPE, checkpoint);
-		} catch (error) {
-			notify(ctx, `Failed to save /undo checkpoint: ${error instanceof Error ? error.message : String(error)}`, "warning");
+	pi.on("agent_start", (_event, ctx) => {
+		if (activeTurn) resolveActiveTurnUserEntry(activeTurn, ctx);
+	});
+
+	pi.on("message_end", async (event, ctx) => {
+		if (event.message.role === "assistant" && event.message.stopReason === "aborted") {
+			await saveActiveTurnCheckpoint(pi, ctx);
 		}
+	});
+
+	pi.on("agent_end", async (_event, ctx) => {
+		await saveActiveTurnCheckpoint(pi, ctx);
 	});
 
 	pi.registerCommand("undo", {
