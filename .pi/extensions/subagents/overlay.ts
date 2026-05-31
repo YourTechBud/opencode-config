@@ -49,6 +49,7 @@ class SubagentsOverlay implements Component, Focusable {
 	private scroll = 0;
 	private followTail = false;
 	private pendingG = false;
+	private wrapEnabled = true;
 	private unsubscribe: (() => void) | undefined;
 
 	constructor(
@@ -97,7 +98,10 @@ class SubagentsOverlay implements Component, Focusable {
 				this.scroll = this.followTail ? Number.MAX_SAFE_INTEGER : 0;
 			}
 		} else {
-			if (data === "g") {
+			if (data === "w" || data === "W") {
+				this.wrapEnabled = !this.wrapEnabled;
+				this.pendingG = false;
+			} else if (data === "g") {
 				if (this.pendingG) {
 					this.scroll = 0;
 					this.followTail = false;
@@ -163,6 +167,11 @@ class SubagentsOverlay implements Component, Focusable {
 		return this.shell("Sub-agents", body, " Enter inspect • Esc/q close", width);
 	}
 
+	private formatBlock(input: string, width: number): string[] {
+		if (this.wrapEnabled) return wrap(input, width);
+		return input.split(/\r?\n/).map((line) => truncate(line, width));
+	}
+
 	private renderDetail(width: number): string[] {
 		const th = this.theme;
 		const task = this.state.list()[this.selected];
@@ -176,6 +185,9 @@ class SubagentsOverlay implements Component, Focusable {
 		body.push(` Duration: ${formatDuration((task.completedAt ?? Date.now()) - task.startedAt)}`);
 		if (task.childSessionFile) body.push(` Session: ${truncate(task.childSessionFile, contentWidth - 9)}`);
 		body.push("");
+		body.push(th.fg("dim" as any, " Prompt"));
+		for (const line of this.formatBlock(task.prompt, contentWidth)) body.push(`   ${line}`);
+		body.push("");
 		body.push(th.fg("dim" as any, " Activity"));
 		for (const item of task.activities) {
 			const detail = item.detail ? ` ${item.detail}` : "";
@@ -184,7 +196,7 @@ class SubagentsOverlay implements Component, Focusable {
 		body.push("");
 		body.push(th.fg("dim" as any, " Final response"));
 		if (task.response) {
-			for (const line of wrap(task.response, contentWidth)) body.push(`   ${line}`);
+			for (const line of this.formatBlock(task.response, contentWidth)) body.push(`   ${line}`);
 		} else if (task.error) {
 			body.push(th.fg("warning" as any, `   ${task.error}`));
 		} else {
@@ -200,7 +212,8 @@ class SubagentsOverlay implements Component, Focusable {
 			if (this.scroll >= maxScroll && task.status === "running") this.followTail = true;
 		}
 		const scrolled = body.slice(this.scroll, this.scroll + maxBody);
-		return this.shell(`${task.agent} · ${task.status}`, scrolled, " j/k scroll • G bottom • gg top • Esc back • q close", width);
+		const wrapState = this.wrapEnabled ? "on" : "off";
+		return this.shell(`${task.agent} · ${task.status}`, scrolled, ` j/k scroll • G bottom • gg top • w wrap:${wrapState} • Esc back • q close`, width);
 	}
 }
 
