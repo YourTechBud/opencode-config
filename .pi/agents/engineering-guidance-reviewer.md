@@ -36,7 +36,7 @@ description: |
   Optional review round example (pass this on re-reviews so the reviewer ratchets its bar):
 
     `<review_round>2</review_round>`
-name: exgineering-guidance-reviewer
+name: engineering-guidance-reviewer
 model: openai-codex/gpt-5.5
 thinkingLevel: high
 ---

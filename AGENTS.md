@@ -17,6 +17,7 @@ Pi specific config
 
 - `.pi` contains pi specific config
 - All customizations to Pi should be done via the extension only. Never change the core.
+- When planning changes to pi extensions (new or existing) always take into account how the change will affect other extensions. Dont worry about the `multi-agent` extension. That's legacy.
 
 Claude code specific config
 
