@@ -7,7 +7,7 @@ The skills under `.agents/skills` are shared across harnesses; everything else i
 ## OpenCode
 
 1. Clone this repo somewhere on your machine.
-2. Set `OPENCODE_CONFIG_DIR` to the `.opencode` directory *inside* your cloned copy (i.e., `<path-you-cloned-to>/.opencode`).
+2. Set `OPENCODE_CONFIG_DIR` to the `.opencode` directory _inside_ your cloned copy (i.e., `<path-you-cloned-to>/.opencode`).
 
 Add this to your shell profile:
 
@@ -30,17 +30,16 @@ Pi doesn't use an env var — instead, point its settings file at the directorie
 
 ```json
 {
-  "extensions": [
-    "/path/to/cloned/opencode-config/.pi/extensions"
-  ],
-  "skills": [
-    "/path/to/cloned/opencode-config/.agents/skills"
-  ],
-  "prompts": [
-    "/path/to/cloned/opencode-config/.opencode/commands"
-  ],
-  "agents": [
-    "/path/to/cloned/opencode-config/.pi/agents"
+  "extensions": ["/path/to/cloned/opencode-config/.pi/extensions"],
+  "skills": ["/path/to/cloned/opencode-config/.agents/skills"],
+  "prompts": ["/path/to/cloned/opencode-config/.opencode/commands"],
+  "agents": ["/path/to/cloned/opencode-config/.pi/agents"],
+  "codexFastModels": [
+    {
+      "base": "gpt-5.5",
+      "alias": "gpt-5.5-fast",
+      "name": "GPT-5.5 Fast"
+    }
   ]
 }
 ```
@@ -50,6 +49,8 @@ Notes:
 - `skills` points at `.agents/skills` because skills are shared with OpenCode.
 - `prompts` reuses the OpenCode `commands` directory so slash-commands stay in sync.
 - `extensions` and `agents` are Pi-specific and live under `.pi/`.
+- `codexFastModels` is consumed by the Pi `codex-fast-model` extension. It registers `openai-codex/gpt-5.5-fast` as a local alias that sends upstream requests to `gpt-5.5` with `service_tier: "priority"`. Pi/OpenCode currently price that as 2.5× normal GPT-5.5.
+- Add `openai-codex/gpt-5.5-fast` to `enabledModels` if you want it in Pi's scoped model picker / model cycling list.
 
 Restart Pi and it should pick up everything automatically.
 

@@ -33,7 +33,7 @@ description: |
 
     `<context>Security is intentionally lightweight here for now; focus on boundaries, runtime behavior, and diagnosability.</context>`
 name: engineering-guidance-reviewer
-model: openai-codex/gpt-5.5
+model: openai-codex/gpt-5.5-fast
 thinkingLevel: high
 ---
 
