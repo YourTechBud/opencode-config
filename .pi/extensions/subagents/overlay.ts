@@ -42,6 +42,9 @@ function modelLabel(task: SubagentTask): string {
 	return task.model ?? task.thinkingLevel ?? "model unknown";
 }
 
+const OVERLAY_MAX_HEIGHT_RATIO = 0.8;
+const SHELL_CHROME_LINES = 3;
+
 class SubagentsOverlay implements Component, Focusable {
 	focused = false;
 	private mode: "list" | "detail" = "list";
@@ -128,8 +131,14 @@ class SubagentsOverlay implements Component, Focusable {
 	}
 
 	render(width: number): string[] {
-		const w = Math.max(48, Math.min(96, width));
+		const w = Math.max(1, width);
 		return this.mode === "detail" ? this.renderDetail(w) : this.renderList(w);
+	}
+
+	private maxBodyLines(): number {
+		const terminalRows = Math.max(1, this.tui.terminal.rows);
+		const overlayRows = Math.max(SHELL_CHROME_LINES + 1, Math.floor(terminalRows * OVERLAY_MAX_HEIGHT_RATIO));
+		return Math.max(1, overlayRows - SHELL_CHROME_LINES);
 	}
 
 	private shell(title: string, body: string[], footer: string, width: number): string[] {
@@ -151,7 +160,10 @@ class SubagentsOverlay implements Component, Focusable {
 			body.push(th.fg("dim" as any, " No sub-agent tasks in this session."));
 		} else {
 			this.selected = Math.min(this.selected, tasks.length - 1);
-			for (let i = 0; i < tasks.length; i++) {
+			const taskCapacity = Math.max(1, Math.floor((this.maxBodyLines() - 3) / 2));
+			const start = Math.min(Math.max(0, this.selected - taskCapacity + 1), Math.max(0, tasks.length - taskCapacity));
+			const end = Math.min(tasks.length, start + taskCapacity);
+			for (let i = start; i < end; i++) {
 				const task = tasks[i]!;
 				const selected = i === this.selected;
 				const pointer = selected ? th.fg("accent" as any, "▶") : " ";
@@ -203,7 +215,7 @@ class SubagentsOverlay implements Component, Focusable {
 			body.push(th.fg("dim" as any, "   Not available yet."));
 		}
 
-		const maxBody = 28;
+		const maxBody = this.maxBodyLines();
 		const maxScroll = Math.max(0, body.length - maxBody);
 		if (this.followTail) {
 			this.scroll = maxScroll;
