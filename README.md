@@ -1,4 +1,4 @@
-# coding-agent-config
+# coding-harness-config
 
 Shared config directory containing **skills**, **agents**, **plugins**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code).
 
@@ -13,7 +13,7 @@ Add this to your shell profile:
 
 ```sh
 # ~/.zshrc or ~/.bashrc
-export OPENCODE_CONFIG_DIR="/path/to/cloned/opencode-config/.opencode"
+export OPENCODE_CONFIG_DIR="/path/to/cloned/coding-harness-config/.opencode"
 ```
 
 Restart your shell (or `source` your profile), and you're done.
@@ -26,14 +26,14 @@ Pi doesn't use an env var — instead, point its settings file at the directorie
 
 1. Clone this repo somewhere on your machine.
 2. Open `~/.pi/agent/settings.json` (create it if it doesn't exist).
-3. Add (or merge) the following keys, replacing `/path/to/cloned/opencode-config` with the actual path where you cloned this repo:
+3. Add (or merge) the following keys, replacing `/path/to/cloned/coding-harness-config` with the actual path where you cloned this repo:
 
 ```json
 {
-  "extensions": ["/path/to/cloned/opencode-config/.pi/extensions"],
-  "skills": ["/path/to/cloned/opencode-config/.agents/skills"],
-  "prompts": ["/path/to/cloned/opencode-config/.opencode/commands"],
-  "agents": ["/path/to/cloned/opencode-config/.pi/agents"],
+  "extensions": ["/path/to/cloned/coding-harness-config/.pi/extensions"],
+  "skills": ["/path/to/cloned/coding-harness-config/.agents/skills"],
+  "prompts": ["/path/to/cloned/coding-harness-config/.opencode/commands"],
+  "agents": ["/path/to/cloned/coding-harness-config/.pi/agents"],
   "codexFastModels": [
     {
       "base": "gpt-5.5",
