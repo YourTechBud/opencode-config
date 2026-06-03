@@ -6,7 +6,7 @@ This repo holds the configuration for various coding harnesses like OpenCode, Pi
 
 Common configurations
 
-- `.agents/skills`: Contains skills which are symlinked to `.opencode/skills` and `.claude/skills`.
+- `.agents/skills`: All skills are sourced from here.
 
 Opencode specific config
 

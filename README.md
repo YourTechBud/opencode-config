@@ -22,8 +22,6 @@ The next time you start OpenCode, it should load all configuration from this dir
 
 ## Pi
 
-Pi doesn't use an env var — instead, point its settings file at the directories in this repo.
-
 1. Clone this repo somewhere on your machine.
 2. Open `~/.pi/agent/settings.json` (create it if it doesn't exist).
 3. Add (or merge) the following keys, replacing `/path/to/cloned/coding-harness-config` with the actual path where you cloned this repo:
@@ -56,7 +54,27 @@ Restart Pi and it should pick up everything automatically.
 
 ## Claude Code
 
-_TBD — config lives under `.claude/` but setup instructions aren't written up yet._
+Claude Code config is packaged as a local plugin (`essentials`) under `.claude/`. Install it by registering the marketplace in your global settings.
+
+1. Clone this repo somewhere on your machine.
+2. Open `~/.claude/settings.json` (create it if it doesn't exist).
+3. Add (or merge) the following, replacing the path with where you cloned this repo, then restart Claude Code:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "yourtechbud": {
+      "source": {
+        "source": "directory",
+        "path": "/path/to/cloned/coding-harness-config/.claude"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "essentials@yourtechbud": true
+  }
+}
+```
 
 ## Maintenance
 
