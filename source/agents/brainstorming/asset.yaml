@@ -1,0 +1,19 @@
+kind: agent
+frontmatter: {}
+targets:
+  opencode:
+    frontmatter:
+      description: |
+        Collaborative brainstorming partner for exploratory thinking, problem framing, concept understanding, architecture/UX/design direction, and planning before execution.
+
+        Use this agent when the user wants a thinking partner rather than a builder, or when a request needs shared understanding before action. It helps prevent premature answers, unclear branches, weak framing, and accidental implementation. It stops at a plan unless the user explicitly authorizes implementation.
+      mode: primary
+      permission:
+        edit: allow
+        bash: allow
+        task:
+          "*": allow
+          engineering-guidance-reviewer: deny
+        skill:
+          "*": allow
+          brainstorming: deny

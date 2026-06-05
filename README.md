@@ -1,8 +1,8 @@
 # coding-harness-config
 
-Shared config directory containing **skills**, **agents**, **plugins**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code).
+Shared config directory containing **skills**, **commands/prompts**, **agents**, **plugins**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code).
 
-The skills under `.agents/skills` are shared across harnesses; everything else is harness-specific and lives under the matching top-level directory (`.opencode`, `.pi`, `.claude`).
+Canonical assets live under `source/`. The harness directories (`.opencode`, `.pi`, `.claude`) are generated from that source and committed for direct consumption.
 
 ## OpenCode
 
@@ -29,8 +29,8 @@ The next time you start OpenCode, it should load all configuration from this dir
 ```json
 {
   "extensions": ["/path/to/cloned/coding-harness-config/.pi/extensions"],
-  "skills": ["/path/to/cloned/coding-harness-config/.agents/skills"],
-  "prompts": ["/path/to/cloned/coding-harness-config/.opencode/commands"],
+  "skills": ["/path/to/cloned/coding-harness-config/.pi/skills"],
+  "prompts": ["/path/to/cloned/coding-harness-config/.pi/prompts"],
   "agents": ["/path/to/cloned/coding-harness-config/.pi/agents"],
   "codexFastModels": [
     {
@@ -44,9 +44,8 @@ The next time you start OpenCode, it should load all configuration from this dir
 
 Notes:
 
-- `skills` points at `.agents/skills` because skills are shared with OpenCode.
-- `prompts` reuses the OpenCode `commands` directory so slash-commands stay in sync.
-- `extensions` and `agents` are Pi-specific and live under `.pi/`.
+- `skills`, `prompts`, `extensions`, and `agents` point at generated Pi-specific outputs under `.pi/`.
+- Edit canonical files under `source/`, then run `pnpm run generate` to update generated harness outputs.
 - `codexFastModels` is consumed by the Pi `codex-fast-model` extension. It registers `openai-codex/gpt-5.5-fast` as a local alias that sends upstream requests to `gpt-5.5` with `service_tier: "priority"`. Pi/OpenCode currently price that as 2.5× normal GPT-5.5.
 - Add `openai-codex/gpt-5.5-fast` to `enabledModels` if you want it in Pi's scoped model picker / model cycling list.
 
@@ -78,4 +77,11 @@ Claude Code config is packaged as a local plugin (`essentials`) under `.claude/`
 
 ## Maintenance
 
-Remember to keep this repo updated periodically as your skills/agents/plugins/extensions evolve.
+Edit canonical assets under `source/`, then run:
+
+```sh
+pnpm run generate
+pnpm run check
+```
+
+Do not edit `.opencode`, `.pi`, or `.claude` directly; they are destructively regenerated.

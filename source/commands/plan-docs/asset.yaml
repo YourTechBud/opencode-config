@@ -1,0 +1,8 @@
+kind: command
+frontmatter:
+  description: Plan documentation changes from provided guidance
+targets:
+  opencode: {}
+  pi: {}
+  claude:
+    as: skill

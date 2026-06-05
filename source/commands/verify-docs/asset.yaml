@@ -1,0 +1,8 @@
+kind: command
+frontmatter:
+  description: Verify documentation against conversation context
+targets:
+  opencode: {}
+  pi: {}
+  claude:
+    as: skill

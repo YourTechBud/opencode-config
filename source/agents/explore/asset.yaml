@@ -1,0 +1,8 @@
+kind: agent
+frontmatter: {}
+targets:
+  pi:
+    frontmatter:
+      description: Finds useful starting files and search paths when the primary agent needs orientation in a vague or unfamiliar part of the codebase.
+      model: openai-codex/gpt-5.4-mini
+      thinkingLevel: low

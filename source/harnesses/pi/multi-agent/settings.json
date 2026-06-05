@@ -1,0 +1,10 @@
+{
+	"defaults": {
+		"model": "openai-codex/gpt-5.5",
+		"thinkingLevel": "high",
+		"tools": ["read", "bash"]
+	},
+	"childAgents": {
+		"cwd": "inherit"
+	}
+}

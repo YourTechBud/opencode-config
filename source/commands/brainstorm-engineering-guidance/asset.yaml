@@ -1,0 +1,10 @@
+kind: command
+frontmatter:
+  description: Brainstorm repo-specific engineering guidance, including UX, refactoring, observability, and review priorities
+targets:
+  opencode:
+    frontmatter:
+      agent: brainstorming
+  pi: {}
+  claude:
+    as: skill

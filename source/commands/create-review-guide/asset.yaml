@@ -1,0 +1,8 @@
+kind: command
+frontmatter:
+  description: Generate a reviewer's orientation guide (HTML) for a changeset to make human review faster
+targets:
+  opencode: {}
+  pi: {}
+  claude:
+    as: skill

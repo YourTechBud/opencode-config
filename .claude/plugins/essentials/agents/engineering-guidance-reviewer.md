@@ -33,8 +33,7 @@ description: |
   Optional context example:
 
     `<context>Security is intentionally lightweight here for now; focus on boundaries, runtime behavior, and diagnosability.</context>`
-model: openai-codex/gpt-5.5
-thinkingLevel: high
+disallowedTools: Write, Edit
 ---
 
 # Engineering Guidance Reviewer

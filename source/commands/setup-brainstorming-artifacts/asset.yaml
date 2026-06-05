@@ -1,0 +1,10 @@
+kind: command
+frontmatter:
+  description: Set up or revise a repo-local brainstorming artifact workspace under .isagi
+targets:
+  opencode:
+    frontmatter:
+      agent: brainstorming
+  pi: {}
+  claude:
+    as: skill

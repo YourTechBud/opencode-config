@@ -4,21 +4,26 @@ This repo holds the configuration for various coding harnesses like OpenCode, Pi
 
 ## Repo structure
 
-Common configurations
+Canonical source
 
-- `.agents/skills`: All skills are sourced from here.
+- `source/skills`: Canonical skill assets. Each asset has `asset.yaml` for metadata/frontmatter and `body.md` for the prompt body.
+- `source/commands`: Canonical command/prompt assets. OpenCode commands and Pi prompts are generated from here; Claude receives these as plugin skills with model auto-invocation disabled by default.
+- `source/agents`: Canonical agent/subagent assets.
+- `source/harnesses`: Handwritten harness config that is copied into generated harness directories.
 
-Opencode specific config
+Generated harness directories
 
-- `.opencode` contains opencode specific configuration
-- `.opencode/agents` contains opencode agents. The agents with `mode: subagent` are shared with Pi. So edits to files with `mode: subagent` should be reproduced to the equivalent pi agents in `.pi/agents`.
+- `.opencode`, `.pi`, and `.claude` are fully generated. Do not edit them directly.
+- These directories are destructively recreated by `pnpm run generate`; make all changes under `source/` instead.
+- Generated outputs are committed so consumers can use the repo without running generation after every pull.
+
+Generation commands
+
+- `pnpm run generate`: recreate `.opencode`, `.pi`, and `.claude` from `source/`.
+- `pnpm run check`: verify committed generated outputs match `source/`.
 
 Pi specific config
 
-- `.pi` contains pi specific config
 - All customizations to Pi should be done via the extension only. Never change the core.
 - When planning changes to pi extensions (new or existing) always take into account how the change will affect other extensions. Dont worry about the `multi-agent` extension. That's legacy.
-
-Claude code specific config
-
-- `.claude` contains Claude code specific configuration
+- All pi extension code is present in `source/harnesses/pi/extensions`

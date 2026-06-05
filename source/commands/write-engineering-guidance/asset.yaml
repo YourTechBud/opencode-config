@@ -1,0 +1,10 @@
+kind: command
+frontmatter:
+  description: Write or refactor engineering guidance docs from the current conversation
+targets:
+  opencode:
+    frontmatter:
+      agent: build
+  pi: {}
+  claude:
+    as: skill

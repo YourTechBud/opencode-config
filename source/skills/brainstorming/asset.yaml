@@ -1,0 +1,10 @@
+kind: skill
+frontmatter:
+  description: |
+    Thinking-partner loop for exploring, framing, and planning before execution — builds shared understanding, surfaces branches, and stops at a plan unless implementation is authorized.
+    Invoke whenever the user signals exploration or a request needs framing before action; stay loaded for the whole conversation.
+    Triggers: "brainstorm", "let's think about", "I'm trying to figure out", "should I", "what about", "help me design".
+targets:
+  opencode: {}
+  pi: {}
+  claude: {}
