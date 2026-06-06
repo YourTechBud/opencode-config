@@ -4,9 +4,17 @@
   "scripts": {
     "generate": "tsx generator/index.ts generate",
     "check": "tsx generator/index.ts check",
-    "codex:install": "tsx generator/codex-install.ts install",
-    "codex:clear": "tsx generator/codex-install.ts clear",
-    "codex:sync": "pnpm run generate && pnpm run codex:install"
+    "harness:install": "tsx generator/harness-install.ts install all",
+    "harness:clear": "tsx generator/harness-install.ts clear all",
+    "harness:sync": "pnpm run generate && pnpm run harness:install",
+    "codex:install": "tsx generator/harness-install.ts install codex",
+    "codex:clear": "tsx generator/harness-install.ts clear codex",
+    "opencode:install": "tsx generator/harness-install.ts install opencode",
+    "opencode:clear": "tsx generator/harness-install.ts clear opencode",
+    "pi:install": "tsx generator/harness-install.ts install pi",
+    "pi:clear": "tsx generator/harness-install.ts clear pi",
+    "claude:install": "tsx generator/harness-install.ts install claude",
+    "claude:clear": "tsx generator/harness-install.ts clear claude"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

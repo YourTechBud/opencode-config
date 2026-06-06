@@ -1,37 +1,77 @@
 # coding-harness-config
 
-Shared config directory containing **skills**, **commands/prompts**, **agents**, **plugins**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code, Codex).
+Shared config directory containing **skills**, **commands/prompts**, **agents**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code, Codex).
 
-Canonical assets live under `source/`. The harness directories (`.opencode`, `.pi`, `.claude`, `.codex`) are generated from that source and committed for direct consumption.
+Canonical assets live under `source/`. Harness outputs are generated as direct root directories (`opencode`, `pi`, `claude`, `codex`) and committed for direct consumption.
 
-## OpenCode
+## Install / sync
 
-1. Clone this repo somewhere on your machine.
-2. Set `OPENCODE_CONFIG_DIR` to the `.opencode` directory _inside_ your cloned copy (i.e., `<path-you-cloned-to>/.opencode`).
+Generated assets are copied into each harness home. The installer treats those destination files as managed by this repo and overwrites them on install. `clear` removes the currently generated files from each harness home.
 
-Add this to your shell profile:
+Install or refresh all harnesses after generation:
 
 ```sh
-# ~/.zshrc or ~/.bashrc
-export OPENCODE_CONFIG_DIR="/path/to/cloned/coding-harness-config/.opencode"
+pnpm run harness:install
 ```
 
-Restart your shell (or `source` your profile), and you're done.
+Regenerate once, then install all harnesses:
 
-The next time you start OpenCode, it should load all configuration from this directory automatically.
+```sh
+pnpm run harness:sync
+```
 
-## Pi
+Remove only files installed by this repo:
 
-1. Clone this repo somewhere on your machine.
-2. Open `~/.pi/agent/settings.json` (create it if it doesn't exist).
-3. Add (or merge) the following keys, replacing `/path/to/cloned/coding-harness-config` with the actual path where you cloned this repo:
+```sh
+pnpm run harness:clear
+```
+
+Per-harness install/clear scripts are also available:
+
+```sh
+pnpm run codex:install   # or codex:clear
+pnpm run opencode:install
+pnpm run pi:install
+pnpm run claude:install
+```
+
+## Install locations
+
+| Harness     | Destination                                                                     |
+| ----------- | ------------------------------------------------------------------------------- |
+| Codex       | `${CODEX_HOME:-~/.codex}/skills`, `${CODEX_HOME:-~/.codex}/agents`              |
+| OpenCode    | `${OPENCODE_CONFIG_DIR:-~/.config/opencode}/skills`, `commands`, `agents`       |
+| Pi          | `${PI_CODING_AGENT_DIR:-~/.pi/agent}/skills`, `prompts`, `agents`, `extensions` |
+| Claude Code | `${CLAUDE_CONFIG_DIR:-~/.claude}/skills`, `agents`                              |
+
+## OpenCode settings
+
+The installer intentionally does **not** copy `opencode/opencode.json`. It honors `OPENCODE_CONFIG_DIR`; unset that environment variable to install into the default `~/.config/opencode` directory.
+
+If desired, apply these settings manually to your OpenCode config:
 
 ```json
 {
-  "extensions": ["/path/to/cloned/coding-harness-config/.pi/extensions"],
-  "skills": ["/path/to/cloned/coding-harness-config/.pi/skills"],
-  "prompts": ["/path/to/cloned/coding-harness-config/.pi/prompts"],
-  "agents": ["/path/to/cloned/coding-harness-config/.pi/agents"],
+  "experimental": {
+    "disable_paste_summary": true
+  },
+  "agent": {
+    "explore": {
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low"
+    }
+  }
+}
+```
+
+## Pi settings
+
+The installer copies Pi skills, prompts, agents, and extensions directly from `pi/` into `${PI_CODING_AGENT_DIR:-~/.pi/agent}`, so `~/.pi/agent/settings.json` does not need repo-local `skills`, `prompts`, `agents`, or `extensions` paths.
+
+Recommended Pi settings:
+
+```json
+{
   "codexFastModels": [
     {
       "base": "gpt-5.5",
@@ -42,68 +82,9 @@ The next time you start OpenCode, it should load all configuration from this dir
 }
 ```
 
-Notes:
+`pnpm run generate` runs `npm install` for generated Pi extensions that contain a `package.json`. `pnpm run harness:install` then copies the generated extensions, including installed `node_modules`, into the Pi agent home.
 
-- `skills`, `prompts`, `extensions`, and `agents` point at generated Pi-specific outputs under `.pi/`.
-- Edit canonical files under `source/`, then run `pnpm run generate` to update generated harness outputs.
-- `codexFastModels` is consumed by the Pi `codex-fast-model` extension. It registers `openai-codex/gpt-5.5-fast` as a local alias that sends upstream requests to `gpt-5.5` with `service_tier: "priority"`. Pi/OpenCode currently price that as 2.5× normal GPT-5.5.
-- Add `openai-codex/gpt-5.5-fast` to `enabledModels` if you want it in Pi's scoped model picker / model cycling list.
-
-Restart Pi and it should pick up everything automatically.
-
-## Codex
-
-Codex assets are generated under `.codex/` and copied into your Codex home with a managed manifest.
-
-Install or refresh after generation:
-
-```sh
-pnpm run codex:install
-```
-
-This copies files to:
-
-```text
-${CODEX_HOME:-~/.codex}/skills/<skill-or-command>/
-${CODEX_HOME:-~/.codex}/agents/yourtechbud-<agent>.toml
-${CODEX_HOME:-~/.codex}/.managed/coding-harness-config/manifest.json
-```
-
-To remove only files installed by this repo:
-
-```sh
-pnpm run codex:clear
-```
-
-To regenerate and install in one step:
-
-```sh
-pnpm run codex:sync
-```
-
-## Claude Code
-
-Claude Code config is packaged as a local plugin (`essentials`) under `.claude/`. Install it by registering the marketplace in your global settings.
-
-1. Clone this repo somewhere on your machine.
-2. Open `~/.claude/settings.json` (create it if it doesn't exist).
-3. Add (or merge) the following, replacing the path with where you cloned this repo, then restart Claude Code:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "yourtechbud": {
-      "source": {
-        "source": "directory",
-        "path": "/path/to/cloned/coding-harness-config/.claude"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "essentials@yourtechbud": true
-  }
-}
-```
+The Pi `codex-fast-model` extension reads `codexFastModels` and registers `openai-codex/gpt-5.5-fast` as a local alias that sends upstream requests to `gpt-5.5` with `service_tier: "priority"`.
 
 ## Maintenance
 
@@ -111,8 +92,8 @@ Edit canonical assets under `source/`, then run:
 
 ```sh
 pnpm run generate
-pnpm run codex:install
+pnpm run harness:install
 pnpm run check
 ```
 
-Do not edit `.opencode`, `.pi`, `.claude`, or `.codex` directly; they are destructively regenerated.
+Do not edit `opencode`, `pi`, `claude`, or `codex` directly; they are destructively regenerated.

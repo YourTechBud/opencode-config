@@ -48,7 +48,7 @@ export function renderCodex(asset: Asset, target: TargetConfig): Array<{ path: s
 
   if (asset.kind === "skill" || asset.kind === "command") {
     const rendered = orderedFrontmatter({ ...frontmatter, name: asset.id }, ["name", "description"]);
-    const skillDir = path.join(".codex", "skills", asset.id);
+    const skillDir = path.join("codex", "skills", asset.id);
     const files: Array<{ path: string; content: string; extrasDir?: string }> = [
       { path: path.join(skillDir, "SKILL.md"), content: renderMarkdown(rendered, body), extrasDir: skillDir },
     ];
@@ -60,5 +60,5 @@ export function renderCodex(asset: Asset, target: TargetConfig): Array<{ path: s
     return files;
   }
 
-  return [{ path: path.join(".codex", "agents", `${NAMESPACE}-${asset.id}.toml`), content: renderAgentToml(asset, frontmatter, body) }];
+  return [{ path: path.join("codex", "agents", `${NAMESPACE}-${asset.id}.toml`), content: renderAgentToml(asset, frontmatter, body) }];
 }

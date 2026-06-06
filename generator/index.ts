@@ -15,7 +15,8 @@ import { renderCodex } from "./renderers/codex.ts";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE_DIR = path.join(REPO_ROOT, "source");
-const OUTPUT_DIRS = [".opencode", ".pi", ".claude", ".codex"];
+const OUTPUT_DIRS = ["opencode", "pi", "claude", "codex"];
+const LEGACY_OUTPUT_DIRS = ["generated", ".opencode", ".pi", ".claude", ".codex"];
 
 interface RenderedFile {
   path: string;
@@ -117,7 +118,7 @@ function renderAssets(assets: Asset[]): RenderedFile[] {
 
 async function copyHarnesses(outputRoot: string): Promise<void> {
   for (const dir of OUTPUT_DIRS) {
-    const name = dir.slice(1);
+    const name = path.basename(dir);
     await copyDir(path.join(SOURCE_DIR, "harnesses", name), path.join(outputRoot, dir));
   }
 }
@@ -145,7 +146,7 @@ async function writeRendered(outputRoot: string, files: RenderedFile[]): Promise
 
 async function findPiExtensionPackageDirs(outputRoot: string): Promise<string[]> {
   const packageDirs: string[] = [];
-  const piExtensionsDir = path.join(outputRoot, ".pi", "extensions");
+  const piExtensionsDir = path.join(outputRoot, "pi", "extensions");
   if (!(await pathExists(piExtensionsDir))) return packageDirs;
 
   const entries = await fs.readdir(piExtensionsDir, { withFileTypes: true });
@@ -184,6 +185,10 @@ async function generateTo(outputRoot: string, resetOutputs: boolean, runHooks: b
     for (const dir of OUTPUT_DIRS) {
       assertKnownOutputDir(dir);
       await resetDir(path.join(outputRoot, dir));
+    }
+    for (const dir of LEGACY_OUTPUT_DIRS) {
+      assertInsideRepo(path.join(outputRoot, dir));
+      await fs.rm(path.join(outputRoot, dir), { recursive: true, force: true });
     }
   } else {
     for (const dir of OUTPUT_DIRS) await resetDir(path.join(outputRoot, dir));

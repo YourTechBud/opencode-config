@@ -16,9 +16,9 @@ export function renderClaude(asset: Asset, target: TargetConfig): Array<{ path: 
 
   if (asset.kind === "skill" || asset.kind === "command") {
     const rendered = orderedFrontmatter({ ...frontmatter, name: asset.id }, ["name", "description", "disable-model-invocation", "user-invocable", "argument-hint"]);
-    return [{ path: path.join(".claude", "plugins", "essentials", "skills", asset.id, "SKILL.md"), content: renderMarkdown(rendered, body), extrasDir: path.join(".claude", "plugins", "essentials", "skills", asset.id) }];
+    return [{ path: path.join("claude", "skills", asset.id, "SKILL.md"), content: renderMarkdown(rendered, body), extrasDir: path.join("claude", "skills", asset.id) }];
   }
 
   const rendered = orderedFrontmatter({ ...frontmatter, name: asset.id }, ["name", "description", "model", "effort", "tools", "disallowedTools"]);
-  return [{ path: path.join(".claude", "plugins", "essentials", "agents", `${asset.id}.md`), content: renderMarkdown(rendered, body) }];
+  return [{ path: path.join("claude", "agents", `${asset.id}.md`), content: renderMarkdown(rendered, body) }];
 }

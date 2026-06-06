@@ -15,12 +15,12 @@ export function renderOpenCode(asset: Asset, target: TargetConfig): Array<{ path
 
   if (asset.kind === "skill") {
     const rendered = orderedFrontmatter({ ...frontmatter, name: asset.id }, ["name", "description"]);
-    return [{ path: path.join(".opencode", "skills", asset.id, "SKILL.md"), content: renderMarkdown(rendered, body), extrasDir: path.join(".opencode", "skills", asset.id) }];
+    return [{ path: path.join("opencode", "skills", asset.id, "SKILL.md"), content: renderMarkdown(rendered, body), extrasDir: path.join("opencode", "skills", asset.id) }];
   }
 
   if (asset.kind === "command") {
-    return [{ path: path.join(".opencode", "commands", `${asset.id}.md`), content: renderMarkdown(orderedFrontmatter(frontmatter, ["description"]), body) }];
+    return [{ path: path.join("opencode", "commands", `${asset.id}.md`), content: renderMarkdown(orderedFrontmatter(frontmatter, ["description"]), body) }];
   }
 
-  return [{ path: path.join(".opencode", "agents", `${asset.id}.md`), content: renderMarkdown(orderedFrontmatter(frontmatter, ["description", "mode", "model"]), body) }];
+  return [{ path: path.join("opencode", "agents", `${asset.id}.md`), content: renderMarkdown(orderedFrontmatter(frontmatter, ["description", "mode", "model"]), body) }];
 }
