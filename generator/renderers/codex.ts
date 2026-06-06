@@ -6,10 +6,11 @@ import { transformBody } from "../transforms.ts";
 
 const NAMESPACE = "yourtechbud";
 
-function common(asset: Asset, target: TargetConfig): { frontmatter: Frontmatter; body: string } {
+function common(asset: Asset, target: TargetConfig): { frontmatter: Frontmatter; policy: Frontmatter; body: string } {
   const frontmatter = mergeFrontmatter(asset.config.frontmatter, target.frontmatter);
+  const policy = mergeFrontmatter(target.policy);
   const body = transformBody(asset.body, asset, "codex");
-  return { frontmatter, body };
+  return { frontmatter, policy, body };
 }
 
 function codexAgentName(assetId: string): string {
@@ -38,23 +39,28 @@ function renderAgentToml(asset: Asset, frontmatter: Frontmatter, body: string): 
     .join("\n") + "\n";
 }
 
-function commandOpenAiYaml(): string {
-  return YAML.stringify({ policy: { allow_implicit_invocation: false } });
+function implicitInvocationDisabled(policy: Frontmatter): boolean {
+  return policy.allow_implicit_invocation === false;
+}
+
+function openAiYaml(policy: Frontmatter): string {
+  return YAML.stringify({ policy });
 }
 
 export function renderCodex(asset: Asset, target: TargetConfig): Array<{ path: string; content: string; extrasDir?: string }> {
-  const { frontmatter, body } = common(asset, target);
+  const { frontmatter, policy, body } = common(asset, target);
   requireDescription(frontmatter, `${asset.kind}:${asset.id}:codex`);
 
   if (asset.kind === "skill" || asset.kind === "command") {
+    const skillPolicy = asset.kind === "command" ? { ...policy, allow_implicit_invocation: false } : policy;
     const rendered = orderedFrontmatter({ ...frontmatter, name: asset.id }, ["name", "description"]);
     const skillDir = path.join("codex", "skills", asset.id);
     const files: Array<{ path: string; content: string; extrasDir?: string }> = [
       { path: path.join(skillDir, "SKILL.md"), content: renderMarkdown(rendered, body), extrasDir: skillDir },
     ];
 
-    if (asset.kind === "command") {
-      files.push({ path: path.join(skillDir, "agents", "openai.yaml"), content: commandOpenAiYaml() });
+    if (Object.keys(skillPolicy).length > 0 || implicitInvocationDisabled(skillPolicy)) {
+      files.push({ path: path.join(skillDir, "agents", "openai.yaml"), content: openAiYaml(skillPolicy) });
     }
 
     return files;

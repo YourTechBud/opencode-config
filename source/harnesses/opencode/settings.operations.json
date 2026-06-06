@@ -1,0 +1,23 @@
+[
+  {
+    "dest": "opencode.json",
+    "path": ["agent", "explore"],
+    "mode": "setIfMissing",
+    "value": {
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low"
+    }
+  },
+  {
+    "dest": "opencode.json",
+    "path": ["experimental", "disable_paste_summary"],
+    "mode": "setIfMissing",
+    "value": true
+  },
+  {
+    "dest": "opencode.json",
+    "path": ["permission", "skill", "brainstorming-*-blueprint"],
+    "mode": "setIfMissing",
+    "value": "ask"
+  }
+]

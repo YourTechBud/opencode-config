@@ -1,0 +1,15 @@
+[
+  {
+    "dest": "settings.json",
+    "path": ["codexFastModels"],
+    "mode": "appendIfMissing",
+    "match": {
+      "key": "alias"
+    },
+    "value": {
+      "base": "gpt-5.5",
+      "alias": "gpt-5.5-fast",
+      "name": "GPT-5.5 Fast"
+    }
+  }
+]

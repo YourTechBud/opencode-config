@@ -5,6 +5,7 @@ export type Frontmatter = Record<string, unknown>;
 
 export interface TargetConfig {
   frontmatter?: Frontmatter;
+  policy?: Frontmatter;
   as?: string;
 }
 

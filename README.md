@@ -44,43 +44,18 @@ pnpm run claude:install
 | Pi          | `${PI_CODING_AGENT_DIR:-~/.pi/agent}/skills`, `prompts`, `agents`, `extensions` |
 | Claude Code | `${CLAUDE_CONFIG_DIR:-~/.claude}/skills`, `agents`                              |
 
-## OpenCode settings
+## Settings operations
 
-The installer intentionally does **not** copy `opencode/opencode.json`. It honors `OPENCODE_CONFIG_DIR`; unset that environment variable to install into the default `~/.config/opencode` directory.
+Some harnesses have generated `settings.operations.json` files. During install, these operations are merged into the harness settings without overwriting conflicting user settings:
 
-If desired, apply these settings manually to your OpenCode config:
+- `setIfMissing` sets a whole settings path only when that path is absent.
+- `appendIfMissing` appends an array item only when a matching item is absent.
 
-```json
-{
-  "experimental": {
-    "disable_paste_summary": true
-  },
-  "agent": {
-    "explore": {
-      "model": "openai/gpt-5.4-mini",
-      "variant": "low"
-    }
-  }
-}
-```
+During clear, the inverse is applied safely: settings are removed only when the current value still exactly matches the generated operation value. Malformed destination JSON causes the install or clear command to fail.
 
-## Pi settings
+OpenCode settings operations target `${OPENCODE_CONFIG_DIR:-~/.config/opencode}/opencode.json`. Pi settings operations target `${PI_CODING_AGENT_DIR:-~/.pi/agent}/settings.json`.
 
-The installer copies Pi skills, prompts, agents, and extensions directly from `pi/` into `${PI_CODING_AGENT_DIR:-~/.pi/agent}`, so `~/.pi/agent/settings.json` does not need repo-local `skills`, `prompts`, `agents`, or `extensions` paths.
-
-Recommended Pi settings:
-
-```json
-{
-  "codexFastModels": [
-    {
-      "base": "gpt-5.5",
-      "alias": "gpt-5.5-fast",
-      "name": "GPT-5.5 Fast"
-    }
-  ]
-}
-```
+The installer copies Pi skills, prompts, agents, and extensions directly from `pi/` into `${PI_CODING_AGENT_DIR:-~/.pi/agent}`, so Pi settings do not need repo-local `skills`, `prompts`, `agents`, or `extensions` paths.
 
 `pnpm run generate` runs `npm install` for generated Pi extensions that contain a `package.json`. `pnpm run harness:install` then copies the generated extensions, including installed `node_modules`, into the Pi agent home.
 

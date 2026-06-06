@@ -3,6 +3,7 @@ name: brainstorming-milestone-blueprint
 description: |
   Layered on brainstorming to turn raw ideas, Sparks, or scattered project context into project-scoped milestone directions ready to execute.
   Invoke when the user asks what to work on next, wants to shape ideas into milestones, or mentions Sparks or milestone work.
+disable-model-invocation: true
 ---
 
 # Brainstorming Milestone Blueprint

@@ -3,6 +3,7 @@ name: brainstorming-cognitive-load-blueprint
 description: |
   Layered on brainstorming to offload dense or structural material — branch/decision maps, diagrams, comparisons, plans — into focused artifacts so chat stays scannable.
   Invoke when the user asks for a visual, map, diagram, plan, or comparison; when multiple branches need orientation; when a flow or architecture would clarify faster than prose; or when a reply would otherwise grow long.
+disable-model-invocation: true
 ---
 
 # Brainstorming Cognitive-Load Blueprint

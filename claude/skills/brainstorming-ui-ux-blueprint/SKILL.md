@@ -3,6 +3,7 @@ name: brainstorming-ui-ux-blueprint
 description: |
   Layered on brainstorming for interface, interaction, and visual work: refocuses on the underlying user problem, infers taste from the existing repo, and explores 2–5 distinct variants instead of prose descriptions.
   Invoke for interface, layout, navigation, forms, dashboards, onboarding, modals, journeys, redesigns, or any "what should this look/feel/behave like?" question.
+disable-model-invocation: true
 ---
 
 # Brainstorming UI/UX Blueprint

@@ -5,6 +5,12 @@ frontmatter:
     Invoke when the user asks what to work on next, wants to shape ideas into milestones, or mentions Sparks or milestone work.
 targets:
   opencode: {}
-  pi: {}
-  claude: {}
-  codex: {}
+  pi:
+    frontmatter:
+      disable-model-invocation: true
+  claude:
+    frontmatter:
+      disable-model-invocation: true
+  codex:
+    policy:
+      allow_implicit_invocation: false

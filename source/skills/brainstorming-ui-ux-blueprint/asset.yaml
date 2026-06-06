@@ -5,6 +5,12 @@ frontmatter:
     Invoke for interface, layout, navigation, forms, dashboards, onboarding, modals, journeys, redesigns, or any "what should this look/feel/behave like?" question.
 targets:
   opencode: {}
-  pi: {}
-  claude: {}
-  codex: {}
+  pi:
+    frontmatter:
+      disable-model-invocation: true
+  claude:
+    frontmatter:
+      disable-model-invocation: true
+  codex:
+    policy:
+      allow_implicit_invocation: false
