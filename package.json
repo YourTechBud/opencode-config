@@ -3,7 +3,10 @@
   "type": "module",
   "scripts": {
     "generate": "tsx generator/index.ts generate",
-    "check": "tsx generator/index.ts check"
+    "check": "tsx generator/index.ts check",
+    "codex:install": "tsx generator/codex-install.ts install",
+    "codex:clear": "tsx generator/codex-install.ts clear",
+    "codex:sync": "pnpm run generate && pnpm run codex:install"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

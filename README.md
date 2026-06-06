@@ -1,8 +1,8 @@
 # coding-harness-config
 
-Shared config directory containing **skills**, **commands/prompts**, **agents**, **plugins**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code).
+Shared config directory containing **skills**, **commands/prompts**, **agents**, **plugins**, and **extensions** for the various coding harnesses YourTechBud uses (OpenCode, Pi, Claude Code, Codex).
 
-Canonical assets live under `source/`. The harness directories (`.opencode`, `.pi`, `.claude`) are generated from that source and committed for direct consumption.
+Canonical assets live under `source/`. The harness directories (`.opencode`, `.pi`, `.claude`, `.codex`) are generated from that source and committed for direct consumption.
 
 ## OpenCode
 
@@ -51,6 +51,36 @@ Notes:
 
 Restart Pi and it should pick up everything automatically.
 
+## Codex
+
+Codex assets are generated under `.codex/` and copied into your Codex home with a managed manifest.
+
+Install or refresh after generation:
+
+```sh
+pnpm run codex:install
+```
+
+This copies files to:
+
+```text
+${CODEX_HOME:-~/.codex}/skills/yourtechbud/<skill-or-command>/
+${CODEX_HOME:-~/.codex}/agents/yourtechbud-<agent>.toml
+${CODEX_HOME:-~/.codex}/.managed/coding-harness-config/manifest.json
+```
+
+To remove only files installed by this repo:
+
+```sh
+pnpm run codex:clear
+```
+
+To regenerate and install in one step:
+
+```sh
+pnpm run codex:sync
+```
+
 ## Claude Code
 
 Claude Code config is packaged as a local plugin (`essentials`) under `.claude/`. Install it by registering the marketplace in your global settings.
@@ -81,7 +111,8 @@ Edit canonical assets under `source/`, then run:
 
 ```sh
 pnpm run generate
+pnpm run codex:install
 pnpm run check
 ```
 
-Do not edit `.opencode`, `.pi`, or `.claude` directly; they are destructively regenerated.
+Do not edit `.opencode`, `.pi`, `.claude`, or `.codex` directly; they are destructively regenerated.

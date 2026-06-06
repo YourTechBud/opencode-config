@@ -1,3 +1,4 @@
+import { spawn } from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -10,10 +11,11 @@ import { copyDir, listFiles, pathExists, resetDir, writeFileEnsured } from "./fs
 import { renderOpenCode } from "./renderers/opencode.ts";
 import { renderPi } from "./renderers/pi.ts";
 import { renderClaude } from "./renderers/claude.ts";
+import { renderCodex } from "./renderers/codex.ts";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE_DIR = path.join(REPO_ROOT, "source");
-const OUTPUT_DIRS = [".opencode", ".pi", ".claude"];
+const OUTPUT_DIRS = [".opencode", ".pi", ".claude", ".codex"];
 
 interface RenderedFile {
   path: string;
@@ -82,7 +84,13 @@ async function discoverAssets(): Promise<Asset[]> {
 
 function renderForTarget(asset: Asset, target: TargetName, config: TargetConfig): RenderedFile[] {
   const rendered =
-    target === "opencode" ? renderOpenCode(asset, config) : target === "pi" ? renderPi(asset, config) : renderClaude(asset, config);
+    target === "opencode"
+      ? renderOpenCode(asset, config)
+      : target === "pi"
+        ? renderPi(asset, config)
+        : target === "claude"
+          ? renderClaude(asset, config)
+          : renderCodex(asset, config);
   return rendered.map((item) => ({ ...item, asset }));
 }
 
@@ -135,7 +143,43 @@ async function writeRendered(outputRoot: string, files: RenderedFile[]): Promise
   }
 }
 
-async function generateTo(outputRoot: string, resetOutputs: boolean): Promise<void> {
+async function findPiExtensionPackageDirs(outputRoot: string): Promise<string[]> {
+  const packageDirs: string[] = [];
+  const piExtensionsDir = path.join(outputRoot, ".pi", "extensions");
+  if (!(await pathExists(piExtensionsDir))) return packageDirs;
+
+  const entries = await fs.readdir(piExtensionsDir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isDirectory() || entry.name === "node_modules") continue;
+    const extensionDir = path.join(piExtensionsDir, entry.name);
+    if (await pathExists(path.join(extensionDir, "package.json"))) packageDirs.push(extensionDir);
+  }
+
+  return packageDirs.sort();
+}
+
+async function runCommand(command: string, args: string[], cwd: string): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    const child = spawn(command, args, { cwd, stdio: "inherit" });
+    child.on("error", reject);
+    child.on("exit", (code, signal) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+      reject(new Error(`${command} ${args.join(" ")} failed in ${path.relative(REPO_ROOT, cwd)}${signal ? ` (${signal})` : ` with exit code ${code}`}`));
+    });
+  });
+}
+
+async function runPostGenerateHooks(outputRoot: string): Promise<void> {
+  for (const packageDir of await findPiExtensionPackageDirs(outputRoot)) {
+    console.log(`Installing npm dependencies in ${path.relative(REPO_ROOT, packageDir)}`);
+    await runCommand("npm", ["install"], packageDir);
+  }
+}
+
+async function generateTo(outputRoot: string, resetOutputs: boolean, runHooks: boolean): Promise<void> {
   if (resetOutputs) {
     for (const dir of OUTPUT_DIRS) {
       assertKnownOutputDir(dir);
@@ -148,6 +192,7 @@ async function generateTo(outputRoot: string, resetOutputs: boolean): Promise<vo
   await copyHarnesses(outputRoot);
   const assets = await discoverAssets();
   await writeRendered(outputRoot, renderAssets(assets));
+  if (runHooks) await runPostGenerateHooks(outputRoot);
 }
 
 async function compareDirs(actualRoot: string, expectedRoot: string): Promise<string[]> {
@@ -180,7 +225,7 @@ async function compareDirs(actualRoot: string, expectedRoot: string): Promise<st
 async function check(): Promise<void> {
   const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "coding-harness-config-"));
   try {
-    await generateTo(tmp, false);
+    await generateTo(tmp, false, false);
     const diffs = await compareDirs(REPO_ROOT, tmp);
     if (diffs.length > 0) {
       console.error("Generated outputs are stale. Run pnpm run generate.\n");
@@ -195,7 +240,7 @@ async function check(): Promise<void> {
 async function main(): Promise<void> {
   const command = process.argv[2];
   if (command === "generate") {
-    await generateTo(REPO_ROOT, true);
+    await generateTo(REPO_ROOT, true, true);
     return;
   }
   if (command === "check") {

@@ -6,3 +6,5 @@ targets:
   pi: {}
   claude:
     as: skill
+  codex:
+    as: skill

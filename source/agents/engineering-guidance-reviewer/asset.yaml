@@ -46,3 +46,8 @@ targets:
   claude:
     frontmatter:
       disallowedTools: Write, Edit
+  codex:
+    frontmatter:
+      model: gpt-5.5
+      model_reasoning_effort: high
+      sandbox_mode: read-only

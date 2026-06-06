@@ -1,4 +1,4 @@
-export type TargetName = "opencode" | "pi" | "claude";
+export type TargetName = "opencode" | "pi" | "claude" | "codex";
 export type AssetKind = "skill" | "command" | "agent";
 
 export type Frontmatter = Record<string, unknown>;
@@ -24,5 +24,5 @@ export interface Asset {
   extras: string[];
 }
 
-export const TARGETS: TargetName[] = ["opencode", "pi", "claude"];
+export const TARGETS: TargetName[] = ["opencode", "pi", "claude", "codex"];
 export const KINDS: AssetKind[] = ["skill", "command", "agent"];

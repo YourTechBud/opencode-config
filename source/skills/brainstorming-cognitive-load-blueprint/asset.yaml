@@ -7,3 +7,4 @@ targets:
   opencode: {}
   pi: {}
   claude: {}
+  codex: {}
