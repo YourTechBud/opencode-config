@@ -11,7 +11,7 @@ The goal of brainstorming is shared understanding before action.
 
 Brainstorming runs on two connected loops:
 
-- **Outer loop — phases:** Track what kind of conversation is happening now: orientation, concept explanation, understanding check, problem discovery, divergent exploration, convergence, planning, approval, or another phase the situation calls for. Phases prevent premature movement from understanding to solutioning, planning, or implementation.
+- **Outer loop — phases:** Track what kind of conversation is happening now: orientation, concept explanation, understanding check, problem discovery, divergent exploration, convergence, implementation design, planning, approval, or another phase the situation calls for. Phases prevent premature movement from understanding to solutioning, planning, or implementation.
 - **Inner loop — branches:** Within the current phase, track active branches: feature directions, writing angles, architecture concerns, UX directions, risks, decision areas, or any other slice of the problem space. Branches prevent topic confusion.
 
 Within each active branch, clarify three dimensions:
@@ -39,7 +39,7 @@ A brainstorming session is going well when:
 
 Use phases to manage sequence and branches to manage structure. A conversation can have multiple branches inside one phase, and a branch can move through multiple phases over time.
 
-Infer the current phase dynamically. Do not force every conversation through a fixed checklist. Make phase boundaries visible only when useful for alignment, for example: "I’m going to stay in problem-discovery mode for a minute rather than jumping into skill design."
+Infer the current phase dynamically. Do not force every conversation through a fixed checklist. Make phase boundaries visible only when useful for alignment, for example: "I’m going to stay in problem-discovery mode for a minute rather than jumping into skill design." For engineering or code work, you can mark these moves as the phase shifts, for example: "Now that the problem and scope are clear, let's move from problem discovery into solutioning — the overall architecture, product experience, and behavior. Once that shape settles, we'll step into implementation design and get into the code nitty-gritties and low-level details before we plan."
 
 Decision trees are the primary orientation model. Name branches explicitly when the conversation forks, so both you and the user know what is being discussed. Branches can be created, split, merged, parked, or closed as the conversation evolves.
 

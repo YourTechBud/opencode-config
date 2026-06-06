@@ -64,7 +64,7 @@ pnpm run codex:install
 This copies files to:
 
 ```text
-${CODEX_HOME:-~/.codex}/skills/yourtechbud/<skill-or-command>/
+${CODEX_HOME:-~/.codex}/skills/<skill-or-command>/
 ${CODEX_HOME:-~/.codex}/agents/yourtechbud-<agent>.toml
 ${CODEX_HOME:-~/.codex}/.managed/coding-harness-config/manifest.json
 ```

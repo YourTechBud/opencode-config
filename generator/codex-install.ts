@@ -9,7 +9,7 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 const GENERATED_CODEX_DIR = path.join(REPO_ROOT, ".codex");
 const MANAGED_ROOT = path.join(".managed", "coding-harness-config");
 const MANIFEST_RELATIVE_PATH = path.join(MANAGED_ROOT, "manifest.json");
-const SKILL_DEST_PREFIX = path.join("skills", "yourtechbud");
+const SKILL_DEST_PREFIX = "skills";
 const AGENT_DEST_PREFIX = "agents";
 
 interface ManifestEntry {
