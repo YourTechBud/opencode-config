@@ -15,8 +15,13 @@ relative to `HEAD`, including staged, unstaged, and untracked files.
 
 # Goal
 
-Produce a single self-contained `scratch/review/index.html` that orients a reviewer
-across two layers:
+Produce a single self-contained HTML file under `scratch/review/` that orients a
+reviewer across two layers. Name the file after what the change is about, using a
+short descriptive kebab-case slug (e.g. `scratch/review/auth-token-refresh.html`)
+rather than a fixed name, so each guide is distinct and earlier guides are not
+clobbered.
+
+The guide covers two layers:
 
 1. Orientation — what this change is trying to achieve, and what a reviewer should
    therefore expect to change.
@@ -47,8 +52,10 @@ across two layers:
   `docs/engineering-guidance/` exists, you may consult it to inform what tends to be
   risky in this repo, but do not produce a quality verdict.
 - Read enough surrounding code to describe each module's intent accurately.
-- Output one self-contained `scratch/review/index.html`. Keep it information-dense
-  and scannable; use your judgment on structure and whether any diagram earns its place.
+- Output one self-contained HTML file under `scratch/review/`, named with a short
+  descriptive kebab-case slug for the change (not a fixed `index.html`). Keep it
+  information-dense and scannable; use your judgment on structure and whether any
+  diagram earns its place.
 - Write in plain language and assume the reader may not know the repo's jargon or a
   given technical term; define such terms briefly on first use without bloating the
   main line. Favor a light, scannable surface with short blocks and breathing room,
@@ -58,4 +65,6 @@ across two layers:
 
 # Stop rules
 
-After writing the file, print its path. Do not open it.
+After writing the file, let the user know where it is — print the absolute path to
+it (a short line like "Wrote the review guide to `<absolute path>`" is fine). Don't
+open it.
