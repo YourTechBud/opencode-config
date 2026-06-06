@@ -167,4 +167,4 @@ After findings, optionally include:
 - a short `What looks good` section, only if meaningful
 - a short `Residual Risks / Review Limits` section, if needed
 
-End by offering a targeted follow-up review **only when Blockers or Concerns are present**. For example, invite the caller to ask for a focused pass on a specific area like boundaries, runtime behavior, failure handling, or test adequacy. If the review is terminal (no Blockers or Concerns), do not invite further review.
+End by offering a targeted follow-up review **only when Blockers or Concerns are present**. For example, invite the caller to ask for a focused pass on a specific area like boundaries, runtime behavior, failure handling, or test adequacy. If the review is terminal (no Blockers or Concerns), mention explicitly that no further review is required with the reason.
