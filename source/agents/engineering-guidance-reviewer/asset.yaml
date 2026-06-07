@@ -42,12 +42,12 @@ targets:
   pi:
     frontmatter:
       model: openai-codex/gpt-5.5
-      thinkingLevel: high
+      thinkingLevel: medium
   claude:
     frontmatter:
       disallowedTools: Write, Edit
   codex:
     frontmatter:
       model: gpt-5.5
-      model_reasoning_effort: high
+      model_reasoning_effort: medium
       sandbox_mode: read-only
